@@ -1,6 +1,6 @@
 # Nombre del proyecto: Riconcito Ruedas
 ## Logo: 
-![Gato sentado](img/gato.jpg)
+<img src="img/mi_imagen.png" width="300" alt="Mi imagen" />
 Parrafo con una descripcion general del proyecto: A fin de resolver una problemática que se nos fue planteada donde el parqueadero “Rinconcito Ruedas” requiere nuestro equipo de programación para crear un software de consola en Python con el que pueda gestionar adecuadamente el parqueadero, teniendo en cuenta los requerimientos que solicita el mismo, nuestro equipo de programadores se incorporó en la tarea de crear este software con el objetivo de suplir las necesidades del parqueadero. 
 ## 1. Nombre de los integrantes:
    Mariana Alvarez Betancur 
