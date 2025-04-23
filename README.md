@@ -3,7 +3,7 @@
 
 ![ChatGPT Image 23 abr 2025, 01_50_50 p m](https://github.com/user-attachments/assets/9c8128f6-2d8d-4c80-97ae-f29701e57e85)
 
-## Parrafo con una descripcion general del proyecto:                   
+## Descripción general del proyecto:            
 A fin de resolver una problemática que se nos fue planteada donde el parqueadero “Rinconcito Ruedas” requiere nuestro equipo de programación para crear un software de consola en Python con el que pueda gestionar adecuadamente el parqueadero, teniendo en cuenta los requerimientos que solicita el mismo, nuestro equipo de programadores se incorporó en la tarea de crear este software con el objetivo de suplir las necesidades del parqueadero. 
 ## 1. Nombre de los integrantes:
    Mariana Alvarez Betancur 
@@ -23,5 +23,6 @@ Ingeniería Industrial
    - Identificar las estructuras de datos                
    - Mencionar cómo se imagina el módulo de administrador           
 
-##5. Líder: Mariana Alvarez Betancur
+##5. Líder:           
+Mariana Alvarez Betancur
    
