@@ -1,5 +1,5 @@
 # Nombre del proyecto: Riconcito Ruedas
-## <span style="color: red;">Logo.</span>
+## Logo.
 
 ![ChatGPT Image 23 abr 2025, 01_50_50 p m](https://github.com/user-attachments/assets/9c8128f6-2d8d-4c80-97ae-f29701e57e85)
 
