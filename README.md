@@ -10,7 +10,7 @@ Parrafo con una descripcion general del proyecto: A fin de resolver una problem�
 ## 3. Descripcion de habilidades y fortalezas de cada uno:
    
 ## 4. Asignar las responsabilidades que tendrá cada uno en el proyecto.
-   Investigar (Jhon Andres)
+   Investigar (Jhon Andres)/ln
    Programación (todos)
    Organizar documento (Isabela)
    Representación gráfica de cómo se vería el sistema (Isabela)
