@@ -1,4 +1,4 @@
-# Nombre del proyecto: EASYPARK CONTROL: GESTIÓN DE PARQUEADERO
+# EASYPARK CONTROL: GESTIÓN DE PARQUEADERO
 ## Nombre del parqueadero: Riconcito Ruedas
 ## Logo.
 
