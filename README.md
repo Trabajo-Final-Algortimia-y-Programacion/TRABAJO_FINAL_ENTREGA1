@@ -15,12 +15,12 @@ A fin de resolver una problemática que se nos fue planteada donde el parqueader
 Ingeniería Industrial
 ## 3. Descripcion de habilidades y fortalezas de cada uno:
    
-## 4. Asignar las responsabilidades que tendrá cada uno en el proyecto.
-   - Investigar (Jhon Andres)             
+## 4. Asignar las responsabilidades que tendrá cada uno en el proyecto.         
    - Programación (todos)               
    - Organizar documento (Isabela)             
    - Representación gráfica de cómo se vería el sistema (Isabela)             
-   - Hacer diagrama de flujo o pseudocódigo (Mariana)               
+   - Hacer diagrama de flujo o pseudocódigo (Mariana)
+   - Investigar librerias (Mariana)         
    - Identificar las estructuras de datos                
    - Mencionar cómo se imagina el módulo de administrador           
 
