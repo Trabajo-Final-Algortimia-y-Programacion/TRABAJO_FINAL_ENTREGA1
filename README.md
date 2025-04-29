@@ -7,8 +7,8 @@
 ## Descripción general del proyecto.                   
 A fin de resolver una problemática que se nos fue planteada donde el parqueadero “Rinconcito Ruedas” requiere nuestro equipo de programación para crear un software de consola en Python con el que pueda gestionar adecuadamente el parqueadero, teniendo en cuenta los requerimientos que solicita el mismo, nuestro equipo de programadores se incorporó en la tarea de crear este software con el objetivo de suplir las necesidades del parqueadero. 
 ## 1. Nombre de los integrantes:
-   Mariana Alvarez Betancur 
-   Jhon Andres Taimal Fuelantala
+   Mariana Alvarez Betancur    
+   Jhon Andres Taimal Fuelantala    
    Isabela Velez Buritica
 
 ## 2. Programa al cual pertenece.
