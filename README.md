@@ -18,7 +18,7 @@ Ingeniería Industrial
 ## 4. Asignar las responsabilidades que tendrá cada uno en el proyecto.         
    - Programación (todos)               
    - Organizar documento (Isabela)             
-   - Representación gráfica de cómo se vería el sistema (Isabela)             
+   - Representación gráfica de cómo se vería el sistema (Mariana)             
    - Hacer diagrama de flujo o pseudocódigo (Mariana)
    - Investigar librerias (Mariana)         
    - Identificar las estructuras de datos (Jhon)                
