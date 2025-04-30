@@ -21,8 +21,8 @@ Ingeniería Industrial
    - Representación gráfica de cómo se vería el sistema (Isabela)             
    - Hacer diagrama de flujo o pseudocódigo (Mariana)
    - Investigar librerias (Mariana)         
-   - Identificar las estructuras de datos                
-   - Mencionar cómo se imagina el módulo de administrador           
+   - Identificar las estructuras de datos (Jhon)                
+   - Mencionar cómo se imagina el módulo de administrador (Jhon)          
 
 ## 5. Líder.          
 Mariana Alvarez Betancur
