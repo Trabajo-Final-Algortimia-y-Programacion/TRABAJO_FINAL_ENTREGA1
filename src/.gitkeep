@@ -12,6 +12,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 USUARIOS_FILE = os.path.join(BASE_DIR, 'usuarios.json')
 VEHICULOS_FILE = os.path.join(BASE_DIR, 'vehiculos.json')
 HISTORIAL_FILE = os.path.join(BASE_DIR, 'historial.json')
+CIERRES_FILE = os.path.join(BASE_DIR, 'cierres.json')
+
 
 ESPACIOS_DISPONIBLES = 50
 ESPACIOS = [None] * ESPACIOS_DISPONIBLES
@@ -143,6 +145,12 @@ def administrador():
     if ADMIN_CREDENCIALES.get(usuario) != password:
         print("Credenciales incorrectas.")
         return
+        
+    print("\n¿Desea realizar el cierre de caja?")
+    opcion = input("Digite S para confirmar, cualquier otra para omitir: ").strip().upper()
+    if opcion == 'S':
+        cierre_caja()
+
 
     print("--- Reportes ---")
     print(f"Total de vehículos registrados: {len(historial) + len(vehiculos)}")
@@ -176,17 +184,57 @@ def exportar_csv():
             f.write(f"{h['placa']},{h['documento']},{h['hora_ingreso']},{h['hora_salida']},{h['tiempo_min']},{h['total_pagar']}\n")
     print(f"Datos exportados correctamente en: {ruta}")
 
+def cierre_caja():
+    hoy = datetime.datetime.now().date().isoformat()
+    ingresos_dia = [
+        h for h in historial.values()
+        if datetime.datetime.fromisoformat(h['hora_salida']).date().isoformat() == hoy
+    ]
+
+    total_ingresos = sum(h['total_pagar'] for h in ingresos_dia)
+    total_vehiculos = len(ingresos_dia)
+
+    if total_vehiculos == 0:
+        print("No se han realizado retiros hoy.")
+        return
+
+    resumen = {
+        'fecha': hoy,
+        'vehiculos_retirados': total_vehiculos,
+        'total_ingresos': total_ingresos
+    }
+
+    cierres[hoy] = resumen
+    guardar_datos(CIERRES_FILE, cierres)
+
+    print("\n--- CIERRE DE CAJA ---")
+    print(json.dumps(resumen, indent=4))
+
+def exportar_cierre_csv():
+    nombre = input("Nombre del archivo de cierre CSV (sin extensión): ") + ".csv"
+    ruta = os.path.join(BASE_DIR, nombre)
+
+    with open(ruta, 'w') as f:
+        f.write("fecha,vehiculos_retirados,total_ingresos\n")
+        for cierre in cierres.values():
+            f.write(f"{cierre['fecha']},{cierre['vehiculos_retirados']},{cierre['total_ingresos']}\n")
+
+    print(f"Cierre de caja exportado correctamente en: {ruta}")
+
+
 # --- MAIN ---
 
 def main():
     while True:
-        print("\n--- EasyPark Control ---")
+        print("\n--- Rinconcito Ruedas ---")
         print("1. Registrar usuario")
         print("2. Ingresar vehículo")
         print("3. Retirar vehículo")
         print("4. Administrador")
-        print("5. Exportar CSV")
-        print("6. Salir")
+        print("5. Exportar historial CSV")
+        print("6. Exportar cierre de caja CSV")
+        print("7. Salir")
+
         opcion = input("Seleccione una opción: ")
 
         if opcion == '1': registrar_usuario()
@@ -194,9 +242,10 @@ def main():
         elif opcion == '3': retirar_vehiculo()
         elif opcion == '4': administrador()
         elif opcion == '5': exportar_csv()
-        elif opcion == '6': break
+        elif opcion == '6': exportar_cierre_csv()
+        elif opcion == '7': break
+
         else: print("Opcion inválida")
 
 if __name__ == "__main__":
     main()
-Crear carpeta src
