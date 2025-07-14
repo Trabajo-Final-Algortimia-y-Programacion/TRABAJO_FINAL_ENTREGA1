@@ -1,1 +1,1 @@
-# Manual sw usuario
+# Manual de usuario
