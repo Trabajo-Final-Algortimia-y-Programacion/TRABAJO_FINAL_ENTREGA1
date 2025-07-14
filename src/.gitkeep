@@ -1,1 +1,202 @@
+# gestion_parqueadero.py
+
+import datetime
+import json
+import re
+import os
+
+# Obtener la ruta absoluta de la carpeta donde está este archivo .py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Definir rutas completas para los archivos JSON
+USUARIOS_FILE = os.path.join(BASE_DIR, 'usuarios.json')
+VEHICULOS_FILE = os.path.join(BASE_DIR, 'vehiculos.json')
+HISTORIAL_FILE = os.path.join(BASE_DIR, 'historial.json')
+
+ESPACIOS_DISPONIBLES = 50
+ESPACIOS = [None] * ESPACIOS_DISPONIBLES
+
+ADMIN_CREDENCIALES = {'admin': 'admin123'}
+PRECIO_HORA = 7000
+PRECIO_CUARTO_HORA = 1500
+
+# --- UTILIDADES ---
+
+def cargar_datos(archivo):
+    if os.path.exists(archivo):
+        with open(archivo, 'r') as f:
+            return json.load(f)
+    return {}
+
+def guardar_datos(archivo, datos):
+    with open(archivo, 'w') as f:
+        json.dump(datos, f, indent=4)
+
+usuarios = cargar_datos(USUARIOS_FILE)
+vehiculos = cargar_datos(VEHICULOS_FILE)
+historial = cargar_datos(HISTORIAL_FILE)
+
+# --- VALIDACIONES ---
+
+def validar_nombre(nombre):
+    return len(nombre) >= 3 and nombre.isalpha()
+
+def validar_documento(doc):
+    return doc.isdigit() and 3 <= len(doc) <= 15
+
+def validar_placa(placa):
+    return bool(re.fullmatch(r"[A-Z]{3}\d{3}", placa))
+
+# --- FUNCIONES PRINCIPALES ---
+
+def registrar_usuario():
+    nombre = input("Nombre: ")
+    apellido = input("Apellido: ")
+    documento = input("Documento: ")
+    placa = input("Placa (AAA111): ")
+    telefono = input("Teléfono: ")
+
+    errores = []
+    if not validar_nombre(nombre): errores.append("Nombre inválido.")
+    if not validar_nombre(apellido): errores.append("Apellido inválido.")
+    if not validar_documento(documento): errores.append("Documento inválido.")
+    if not validar_placa(placa): errores.append("Placa inválida.")
+
+    if errores:
+        print("Errores:", *errores, sep="\n")
+        return
+
+    usuarios[documento] = {
+        'nombre': nombre,
+        'apellido': apellido,
+        'documento': documento,
+        'placa': placa,
+        'telefono': telefono
+    }
+    guardar_datos(USUARIOS_FILE, usuarios)
+    print("Usuario registrado exitosamente.")
+
+def ingresar_vehiculo():
+    documento = input("Documento del usuario: ")
+    if documento not in usuarios:
+        print("Usuario no registrado.")
+        return
+    placa = usuarios[documento]['placa']
+    if placa in vehiculos:
+        print("Este vehículo ya está en el parqueadero.")
+        return
+
+    try:
+        espacio = ESPACIOS.index(None)
+    except ValueError:
+        print("No hay espacios disponibles.")
+        return
+
+    hora_ingreso = datetime.datetime.now().isoformat()
+    ESPACIOS[espacio] = placa
+    vehiculos[placa] = {
+        'documento': documento,
+        'hora_ingreso': hora_ingreso,
+        'espacio': espacio
+    }
+    guardar_datos(VEHICULOS_FILE, vehiculos)
+    print(f"Vehículo ingresado en el espacio {espacio}. Recibo generado:")
+    print(json.dumps(vehiculos[placa], indent=4))
+
+def retirar_vehiculo():
+    placa = input("Ingrese la placa: ")
+    if placa not in vehiculos:
+        print("Vehículo no registrado en el parqueadero.")
+        return
+
+    ingreso = datetime.datetime.fromisoformat(vehiculos[placa]['hora_ingreso'])
+    salida = datetime.datetime.now()
+    total_min = (salida - ingreso).total_seconds() / 60
+    horas = int(total_min // 60)
+    cuartos = int((total_min % 60) // 15)
+    total = max(PRECIO_HORA, horas * PRECIO_HORA + cuartos * PRECIO_CUARTO_HORA)
+
+    documento = vehiculos[placa]['documento']
+    espacio = vehiculos[placa]['espacio']
+    ESPACIOS[espacio] = None
+
+    historial_entry = {
+        'placa': placa,
+        'documento': documento,
+        'hora_ingreso': vehiculos[placa]['hora_ingreso'],
+        'hora_salida': salida.isoformat(),
+        'tiempo_min': round(total_min),
+        'total_pagar': total
+    }
+
+    historial[placa] = historial_entry
+    vehiculos.pop(placa)
+    guardar_datos(HISTORIAL_FILE, historial)
+    guardar_datos(VEHICULOS_FILE, vehiculos)
+
+    print("Vehículo retirado. Factura:")
+    print(json.dumps(historial_entry, indent=4))
+
+def administrador():
+    usuario = input("Usuario admin: ")
+    password = input("Contraseña: ")
+    if ADMIN_CREDENCIALES.get(usuario) != password:
+        print("Credenciales incorrectas.")
+        return
+
+    print("--- Reportes ---")
+    print(f"Total de vehículos registrados: {len(historial) + len(vehiculos)}")
+    print(f"Total de vehículos retirados: {len(historial)}")
+    print(f"Total de vehículos sin retirar: {len(vehiculos)}")
+    print(f"Total pagos: ${sum(h['total_pagar'] for h in historial.values())}")
+
+    if historial:
+        tiempos = [h['tiempo_min'] for h in historial.values()]
+        maximo = max(historial.values(), key=lambda x: x['tiempo_min'])
+        minimo = min(historial.values(), key=lambda x: x['tiempo_min'])
+        print(f"Tiempo promedio: {sum(tiempos) / len(tiempos):.2f} minutos")
+        print(f"Parqueo máximo: {maximo['placa']} con {maximo['tiempo_min']} minutos")
+        print(f"Parqueo mínimo: {minimo['placa']} con {minimo['tiempo_min']} minutos")
+
+    print("Usuarios registrados:")
+    for u in usuarios.values():
+        print(f"- {u['nombre']} {u['apellido']}, Doc: {u['documento']}, Placa: {u['placa']}")
+
+    print("Ocupación de celdas:")
+    for i, placa in enumerate(ESPACIOS):
+        estado = placa if placa else "Libre"
+        print(f"Espacio {i}: {estado}")
+
+def exportar_csv():
+    nombre = input("Nombre del archivo CSV (sin extensión): ") + ".csv"
+    ruta = os.path.join(BASE_DIR, nombre)
+    with open(ruta, 'w') as f:
+        f.write("placa,documento,hora_ingreso,hora_salida,tiempo_min,total_pagar\n")
+        for h in historial.values():
+            f.write(f"{h['placa']},{h['documento']},{h['hora_ingreso']},{h['hora_salida']},{h['tiempo_min']},{h['total_pagar']}\n")
+    print(f"Datos exportados correctamente en: {ruta}")
+
+# --- MAIN ---
+
+def main():
+    while True:
+        print("\n--- EasyPark Control ---")
+        print("1. Registrar usuario")
+        print("2. Ingresar vehículo")
+        print("3. Retirar vehículo")
+        print("4. Administrador")
+        print("5. Exportar CSV")
+        print("6. Salir")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == '1': registrar_usuario()
+        elif opcion == '2': ingresar_vehiculo()
+        elif opcion == '3': retirar_vehiculo()
+        elif opcion == '4': administrador()
+        elif opcion == '5': exportar_csv()
+        elif opcion == '6': break
+        else: print("Opcion inválida")
+
+if __name__ == "__main__":
+    main()
 Crear carpeta src
